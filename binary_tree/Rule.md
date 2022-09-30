@@ -24,7 +24,3 @@ ___  |  |___  |___  |  |  |  |______  |___  |
 ___  |  |___  |  |___  |______  |  |___  |  |
   |___  |___  |  |  |  |  |  |___  |___  |  |
 ```
-
-:::warning
-:warning: Only two mazes are possible because of just one seed.
-:::
