@@ -1,14 +1,13 @@
 type cell = {
-  north: bool;
+  south: bool;
   east : bool;
 }
 
 let l = int_of_string Sys.argv.(1)
 let h = int_of_string Sys.argv.(2)
-let r = int_of_string Sys.argv.(3)
 
 let print_cell c = 
-  if c.north
+  if c.south
   then Format.printf "___"
   else Format.printf "  |"
 
@@ -22,6 +21,10 @@ let rec print_grid grid c l h =
 
 let display grid = print_grid grid 0 l h 
 
-let grid = Array.make (l * h) ({north = true ; east = true})
+let grid = Array.make (l * h) ({south = true ; east = true})
 
-let maze = Array.map (fun c -> if (Random.int r) mod 2 = 0 then {north = false ; east = c.east} else {north = c.north ; east = false}) grid |> display
+let maze = Array.map (fun c -> 
+  Random.self_init ();
+  if (Random.int 100) mod 2 = 0 
+  then {south = false   ; east = c.east} 
+  else {south = c.south ; east = false}) grid |> display
