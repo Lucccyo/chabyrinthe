@@ -24,12 +24,14 @@ let rec process wall_arr =
   if Array.length = 0
   then ()
   else 
-    let rand_wall = rand_wall wall_arr in
+    Random.self_init ();
+    let r = Random.int (Array.length wall_arr) in
+    let rand_wall = wall_arr.(r) in 
     match rand_wall.orientation with
-    | N -> 
-    | S -> 
-    | E -> 
-    | W -> 
+    | N -> process Array.append (Array.append (Array.sub 0 r) (Array.sub r (Array.length - r))) voisins de N
+    | S -> process Array.append  
+    | E -> process Array.append  
+    | W -> process Array.append  
 
 let () =
   let init_grid = Array.make (length * hight)
