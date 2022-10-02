@@ -5,8 +5,8 @@ type wall = {
   orientation: dir;
 }
 
-let length = int_of_string Sys.argv.(1)
-let hight  = int_of_string Sys.argv.(2)
+let l = int_of_string Sys.argv.(1)
+let h = int_of_string Sys.argv.(2)
 
 let display grid =
 
@@ -19,8 +19,8 @@ let rand_cell grid =
   Random.self_init ();
   let rand_cell = Random.int (Array.length grid) in
   grid.(rand_cell)
- 
-let rec process wall_arr = 
+
+let rec process grid wall_arr = 
   if Array.length = 0
   then ()
   else 
@@ -28,17 +28,17 @@ let rec process wall_arr =
     let r = Random.int (Array.length wall_arr) in
     let rand_wall = wall_arr.(r) in 
     match rand_wall.orientation with
-    | N -> process Array.append (Array.append (Array.sub 0 r) (Array.sub r (Array.length - r))) voisins de N
-    | S -> process Array.append  
-    | E -> process Array.append  
-    | W -> process Array.append  
+    | N -> process grid Array.append (Array.append (Array.sub a 0 r) (Array.sub a (r + 1) ((Array.length a) - r -1))) grid.(l)
+    | S -> process grid Array.append (Array.append (Array.sub a 0 r) (Array.sub a (r + 1) ((Array.length a) - r -1))) voisins de S
+    | E -> process grid Array.append (Array.append (Array.sub a 0 r) (Array.sub a (r + 1) ((Array.length a) - r -1))) voisins de E 
+    | W -> process grid Array.append (Array.append (Array.sub a 0 r) (Array.sub a (r + 1) ((Array.length a) - r -1))) voisins de W 
 
 let () =
-  let init_grid = Array.make (length * hight)
+  let init_grid = Array.make (l * h)
     ([|{st = true; orientation = N};
-      {st = true; orientation = S}; 
-      {st = true; orientation = E}; 
-      {st = true; orientation = W} |]) in
+       {st = true; orientation = S}; 
+       {st = true; orientation = E}; 
+       {st = true; orientation = W} |]) in
   process (rand_cell init_grid) in
 
 
