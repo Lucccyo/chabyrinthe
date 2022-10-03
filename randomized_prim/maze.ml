@@ -1,14 +1,13 @@
-type dir = | N | S | E | W
-
 type wall = {
   mutable st : bool;
-  orientation: dir;
+  dir: | N | S | E | W;
+  c_index: int;
 }
 
 let l = int_of_string Sys.argv.(1)
 let h = int_of_string Sys.argv.(2)
 
-let display grid =
+let display grid = ...
 
 let rand_wall wall_arr = 
   Random.self_init ();
@@ -28,12 +27,13 @@ let rec process grid wall_arr =
     let r = Random.int (Array.length wall_arr) in
     let rand_wall = wall_arr.(r) in 
     match rand_wall.orientation with
-    | N -> process grid Array.append (Array.append (Array.sub a 0 r) (Array.sub a (r + 1) ((Array.length a) - r -1))) grid.(l)
-    | S -> process grid Array.append (Array.append (Array.sub a 0 r) (Array.sub a (r + 1) ((Array.length a) - r -1))) voisins de S
-    | E -> process grid Array.append (Array.append (Array.sub a 0 r) (Array.sub a (r + 1) ((Array.length a) - r -1))) voisins de E 
-    | W -> process grid Array.append (Array.append (Array.sub a 0 r) (Array.sub a (r + 1) ((Array.length a) - r -1))) voisins de W 
+    | N -> process grid Array.append (Array.append (Array.sub wall_arr 0 r) (Array.sub wall_arr (r + 1) ((Array.length wall_arr) - r -1))) grid.(r - l - 1)
+    | S -> process grid Array.append (Array.append (Array.sub wall_arr 0 r) (Array.sub wall_arr (r + 1) ((Array.length wall_arr) - r -1))) grid.(r + l - 1)
+    | E -> process grid Array.append (Array.append (Array.sub wall_arr 0 r) (Array.sub wall_arr (r + 1) ((Array.length wall_arr) - r -1))) grid (r + 1) 
+    | W -> process grid Array.append (Array.append (Array.sub wall_arr 0 r) (Array.sub wall_arr (r + 1) ((Array.length wall_arr) - r -1))) grid (r - 1) 
 
 let () =
+    (* ajouter l'index de la cellule y*)
   let init_grid = Array.make (l * h)
     ([|{st = true; orientation = N};
        {st = true; orientation = S}; 
@@ -43,6 +43,10 @@ let () =
 
 
 
-(* on cree les walls quand on les ajoute dans le tableau *)
 
 
+(* [|
+  [|"―――";"  |"; "___"; "|  "|];
+  [|"―――";"  |"; "___"; "|  "|];
+  [|"―――";"  |"; "___"; "|  "|];
+  [|"―――";"  |"; "___"; "|  "|];|] *)
