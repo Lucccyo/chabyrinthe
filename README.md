@@ -8,7 +8,7 @@ To create a binary tree maze, for each cell flip a coin to decide
 has a passage leading up or leading left, but never both. 
 whether to add a passage leading up or left. 
 
-> ocamlopt binary_tree/tree.ml -o tree && ./tree 14 14
+> ocamlopt binary_tree/maze.ml -o maze && ./maze 14 14
 
 ```
 |___  |  |  |___  |  |  |  |  |  |___  |  |
