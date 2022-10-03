@@ -26,11 +26,12 @@ let rec process grid wall_arr =
     Random.self_init ();
     let r = Random.int (Array.length wall_arr) in
     let rand_wall = wall_arr.(r) in 
-    match rand_wall.orientation with
-    | N -> process grid Array.append (Array.append (Array.sub wall_arr 0 r) (Array.sub wall_arr (r + 1) ((Array.length wall_arr) - r -1))) grid.(r - l - 1)
-    | S -> process grid Array.append (Array.append (Array.sub wall_arr 0 r) (Array.sub wall_arr (r + 1) ((Array.length wall_arr) - r -1))) grid.(r + l - 1)
-    | E -> process grid Array.append (Array.append (Array.sub wall_arr 0 r) (Array.sub wall_arr (r + 1) ((Array.length wall_arr) - r -1))) grid (r + 1) 
-    | W -> process grid Array.append (Array.append (Array.sub wall_arr 0 r) (Array.sub wall_arr (r + 1) ((Array.length wall_arr) - r -1))) grid (r - 1) 
+    let n = match rand_wall.orientation with
+      | N -> (r - l - 1) 
+      | S -> (r + l - 1) 
+      | E -> (r + 1) 
+      | W -> (r - 1) 
+    process grid Array.append (Array.append (Array.sub wall_arr 0 r) (Array.sub wall_arr (r + 1) ((Array.length wall_arr) - r -1))) grid (n) 
 
 let () =
     (* ajouter l'index de la cellule y*)
