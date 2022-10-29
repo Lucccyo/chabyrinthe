@@ -1,11 +1,40 @@
+type cell = {
+  x: int;
+  y: int;
+  mutable east:  bool;
+  mutable south: bool;
+}
+
+let l = int_of_string Sys.argv.(1)
+let h = int_of_string Sys.argv.(2)
+(* 
+let new_cell i = {
+  x = ; 
+  y = ; 
+  east  = false; 
+  south = false} *)
+
+let init l h = 
+  List.init (l*h) (fun i ->
+    let line = 
+    let col  = i mod l in
+    let x = i - (line * l) in
+    let y = i - (col  * h) in
+    {x; y; east = false; south = false})
+
+
+
+
+
+
+
+
 type wall = {
   mutable st : bool;
   dir: | N | S | E | W;
   c_index: int;
 }
 
-let l = int_of_string Sys.argv.(1)
-let h = int_of_string Sys.argv.(2)
 
 let display grid = ...
 
