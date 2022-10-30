@@ -5,8 +5,11 @@ type cell = {
   mutable south: bool;
 }
 
-let l = int_of_string Sys.argv.(1)
-let h = int_of_string Sys.argv.(2)
+(* let l = int_of_string Sys.argv.(1)
+let h = int_of_string Sys.argv.(2) *)
+
+let l = 4
+let h = 3
 (* 
 let new_cell i = {
   x = ; 
@@ -16,10 +19,10 @@ let new_cell i = {
 
 let init l h = 
   List.init (l*h) (fun i ->
-    let line = 
+    let line = i  /  l in
     let col  = i mod l in
-    let x = i - (line * l) in
-    let y = i - (col  * h) in
+    let x = col in
+    let y = line in
     {x; y; east = false; south = false})
 
 
@@ -28,7 +31,7 @@ let init l h =
 
 
 
-
+(* 
 type wall = {
   mutable st : bool;
   dir: | N | S | E | W;
@@ -70,7 +73,7 @@ let () =
        {st = true; orientation = E}; 
        {st = true; orientation = W} |]) in
   process (rand_cell init_grid) in
-
+ *)
 
 
 
