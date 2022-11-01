@@ -5,11 +5,12 @@ type cell = {
   mutable south: bool;
 }
 
+
 (* let l = int_of_string Sys.argv.(1)
 let h = int_of_string Sys.argv.(2) *)
 
 
-let l = 3
+(* let l = 3
 let h = 4
 
 let grid = 
@@ -26,10 +27,11 @@ let rec shuffle n l =
   if n = 0 
   then l
   else (
-    Random.self_init ();
     let r = Random.int (List.length l) in
     let l = swap l n r in
     shuffle (n-1) l
   )
 
-let shuffle l = shuffle ((List.length l) - 1) l
+let shuffle l = 
+  Random.self_init ();
+  shuffle ((List.length l) - 1) l *)

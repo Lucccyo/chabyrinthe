@@ -37,3 +37,10 @@ Start with a grid full of walls.
   - Make the wall a passage and mark the unvisited cell as part of the maze.
   - Add the neighboring walls of the cell to the wall list.
   - Remove the wall from the list.
+
+
+
+  ___
+ /   \
+ \___/
+     \___
