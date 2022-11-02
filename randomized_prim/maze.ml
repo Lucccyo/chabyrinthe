@@ -1,37 +1,35 @@
-type cell = {
-  x: int;
-  y: int;
-  mutable east:  bool;
-  mutable south: bool;
-}
+type cell = {we: bool; ws: bool}
+type wall = {x:int; y: int; e_or_s: bool}
+
+(* val add : wall array * int -> wall -> wall array * int *)
+let add (w_arr : wall array * int) wall =
+  let l     = snd w_arr in
+  let w_arr = fst w_arr in
+  w_arr.(l - 1) <- wall;
+  (w_arr, l + 1)
+  
+(* val remove : wall array * int -> int -> wall array * int  *)
+let remove (w_arr : wall array * int) r = 
+  let l     = snd w_arr in
+  let w_arr = fst w_arr in
+  w_arr.(r) <- w_arr.(l - 1);
+  (w_arr, l - 1)  
+
+val is_not_visited grid c i = 
+  let n = i - l in
+  let w = i - 1 in
+  let wn = try (grid.(n)).ws with true in
+  let ww = try (grid.(w)).we with true in
+  c.we && c.ws && wn && ww
+
+(* val break : cell array -> int -> int -> bool -> int *)
+let break grid x y e l =
+  let i = y * l + x in
+  let c_i = grid.(i) in
+  let neighbour = if e then i + 1 else i + l in
+  let c_neighbour = grid.(neighbour) in
+  is_not_visited grid c_i i lor is_not_visited grid c_neighbour neighbour
 
 
-(* let l = int_of_string Sys.argv.(1)
-let h = int_of_string Sys.argv.(2) *)
+  
 
-
-(* let l = 3
-let h = 4
-
-let grid = 
-  List.init (l*h) (fun i ->
-    {x = i mod l; y = i  /  l; east = false; south = false})
-
-let swap l i r =
-  let temp_i = List.nth l i in
-  let temp_r = List.nth l r in
-  let l = List.mapi (fun index elem -> if index = i then temp_r else elem) l in
-  List.mapi (fun index elem -> if index = r then temp_i else elem) l
-
-let rec shuffle n l =
-  if n = 0 
-  then l
-  else (
-    let r = Random.int (List.length l) in
-    let l = swap l n r in
-    shuffle (n-1) l
-  )
-
-let shuffle l = 
-  Random.self_init ();
-  shuffle ((List.length l) - 1) l *)
