@@ -26,15 +26,26 @@ let is_not_visited grid c i =
   let ww = try (grid.(w)).we with Invalid_argument _e -> true in
   c.we && c.ws && wn && ww
 
-let break grid x y e r =
+let break grid x y e r w_arr=
   let i = y * l + x in
   let c_i = grid.(i) in
   let j = if e then i + 1 else i + l in
   let c_j = grid.(j) in
   let breakable = is_not_visited grid c_i i lor is_not_visited grid c_j j in
-  if breakable
-  then 
-  else 
+  if breakable then 
+    match e with 
+    | true  -> 
+      add w_arr {x = x + 1; y; e_or_s = true}
+      add w_arr {x = x + 1; y; e_or_s = false}
+      add w_arr {x = x + 1; y = y - 1; e_or_s = false}
+    | false -> 
+      add w_arr {x; y = y + 1; e_or_s = true}
+      add w_arr {x; y = y + 1; e_or_s = false}
+      add w_arr {x = x - 1; y = y + 1; e_or_s = true};
+  remove w_arr r
+  (* then (
+    
+  )  *)
 
 
 
