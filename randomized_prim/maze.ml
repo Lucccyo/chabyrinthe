@@ -118,7 +118,8 @@ let rec init_walls i walls col line =
 let init_walls () = 
   init_walls  0 (Array.make (l * h * 2) {x = -1; y = -1; e_or_s = true}) 0 0
 
-let init =
+let maze =
+  Random.self_init ();
   let grid  = Array.make (l * h) {we = true; ws =  true} in
   let walls = init_walls () in
   let init_wrapper = (Array.make (l * h * 2) {x = -1; y = -1; e_or_s = true}, 0) in
