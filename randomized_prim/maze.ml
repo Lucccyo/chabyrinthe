@@ -22,8 +22,10 @@ let display grid =
 let add (w_arr : wall array * int) wall =
   let l     = snd w_arr in
   let w_arr = fst w_arr in
-  w_arr.(l) <- wall;
-  (w_arr, l + 1)
+  if Array.mem wall w_arr
+  then (w_arr, l)
+  else (w_arr.(l) <- wall;
+  (w_arr, l + 1))
   
 (* val remove : wall array * int -> int -> dyn_w  *)
 let remove (w_arr : wall array * int) r = 
@@ -89,8 +91,8 @@ let break w grid r w_arr l h =
   else (
     grid.(i) <- 
     if w.e_or_s
-    then {we = false ; ws = true}
-    else {we = true ;ws = false};
+    then {we = false ; ws = grid.(i).ws}
+    else {we = grid.(i).we ;ws = false};
     let li = 
       if not i_not_visited 
       then []
