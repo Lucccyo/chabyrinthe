@@ -7,9 +7,10 @@ let l = int_of_string Sys.argv.(1)
 let h = int_of_string Sys.argv.(2)
 
 let display grid = 
+  for i = 0 to l - 1 do printf "___ " done;
   for i = 0 to (Array.length grid) - 1 do
-    if i mod l = 0 then printf "\n";
-    if grid.(i).ws then printf "__" else printf "   ";
+    if i mod l = 0 then printf "\n|";
+    if grid.(i).ws then printf "___" else printf "   ";
     if grid.(i).we then printf "|" else printf " ";
   done;
   printf "\n%!"
