@@ -7,33 +7,40 @@ let l = int_of_string Sys.argv.(1)
 let h = int_of_string Sys.argv.(2)
 
 let display grid = 
-  for i = 0 to l - 1 do printf "___ " done;
+  for i = 0 to l - 1 do printf "___" done;
+  printf "_";
   for i = 0 to (Array.length grid) - 1 do
     if i mod l = 0 then printf "\n|";
-    if grid.(i).ws then printf "___" else printf "   ";
-    if grid.(i).we then printf "|" else printf " ";
+    if grid.(i).ws then printf "__" else printf "  ";
+    if grid.(i).we 
+    then printf "|" 
+    else printf  
+      (if grid.(i).ws || grid.(i + 1).ws
+      then "_"
+      else " ")
   done;
   printf "\n%!"
 
 (* val add : wall array * int -> wall -> wall array * int *)
-let add (wrapper : wall array * int) w =
+let add : wall array * int -> wall -> wall array * int = fun (wip,l) w ->
+(* let add (wrapper : wall array * int) w = *)
+(*
   let l   = snd wrapper in
   let wip = fst wrapper in
-  if Array.mem w wip
-  then wrapper
-  else ( 
-    wip.(l) <- w; 
-    wip, l + 1)
+  *)
+  wip.(l) <- w; 
+  wip, l + 1
   
 (* val remove : wall array * int -> int -> wall array * int *)
-let remove (wrapper : wall array * int) r = 
-  let l   = snd wrapper in
-  let wip = fst wrapper in
+let remove ((wip, l) : wall array * int) r = 
+  (* let l   = snd wrapper in
+  let wip = fst wrapper in *)
   wip.(r) <- wip.(l - 1); 
   wip, l - 1
 
 (* val is_not_visited : cell array -> cell -> int -> bool *)
-let is_not_visited grid c i = 
+let is_not_visited grid i =
+  let c = grid.(i) in 
   let wn = try (grid.(i - l)).ws with Invalid_argument _ -> true in
   let ww = try (grid.(i - 1)).we with Invalid_argument _ -> true in
   c.we && c.ws && wn && ww
@@ -65,36 +72,33 @@ let get_walls_from_neighbour w =
       else [] in 
     l @ (if w.x > 0 then [{x = w.x - 1; y = w.y + 1; e_or_s = true}] else []) (* east *)
 
-(* val break : wall -> cell array -> int -> wall array * int -> wall array * int *)
-let break w grid r wrapper =
+(* val break : cell array -> int -> wall array * int -> wall array * int *)
+let break grid r wrapper =
+  let w = (fst wrapper).(r) in
   let i = w.y * l + w.x in
-  let i_not_visited = is_not_visited grid grid.(i) i in
+  let i_not_visited = is_not_visited grid i in
   let j = if w.e_or_s then i + 1 else i + l in
   let j_not_visited =
     (try
       if j = i + 1 && (i mod l = l - 1) 
       then false 
-      else is_not_visited grid (grid.(j)) j 
+      else is_not_visited grid j 
     with Invalid_argument _ -> false) in
+  let wrapper = remove wrapper r in
   if not (i_not_visited || j_not_visited)
-  then remove wrapper r
-  else begin
+  then wrapper else begin    
     grid.(i) <- if w.e_or_s
       then {we = false ; ws = grid.(i).ws}
       else {we = grid.(i).we ;ws = false};
     let li = 
-      if not i_not_visited 
-      then []
-      else get_walls_from_cell w in
+      if i_not_visited 
+      then get_walls_from_cell w
+      else [] in
     let lj = 
-      if not j_not_visited
-      then []
-      else get_walls_from_neighbour w in
-    let rec add_lst l wrapper = 
-      match l with 
-      | [] -> wrapper
-      | hd :: tl -> add_lst tl (add wrapper hd) in
-    remove (add_lst (li @ lj) wrapper) r end
+      if j_not_visited
+      then get_walls_from_neighbour w
+      else [] in
+      List.fold_left add (List.fold_left add wrapper li) lj end
 
 (* val progress : wall array * int -> cell array -> cell array *)
 let rec progress (wrapper : wall array * int) grid = 
@@ -102,27 +106,15 @@ let rec progress (wrapper : wall array * int) grid =
   then grid
   else  
     let r = Random.int (snd wrapper) in
-    let next_w_arr = break (fst wrapper).(r) grid r wrapper in
+    let next_w_arr = break grid r wrapper in
     progress next_w_arr grid
-
-(* val init_walls : int -> wall array -> int -> int -> wall array *)
-let rec init_walls i walls col line = 
-  if i = Array.length walls
-  then walls
-  else (
-    walls.(i)     <- {x = col; y = line; e_or_s = true};
-    walls.(i + 1) <- {x = col; y = line; e_or_s = false};
-    let new_col  = (col + 1) mod l in
-    let new_line = (if col = new_col - 1 then line else line + 1) in
-    init_walls (i+2) walls new_col new_line)
-
-let init_walls () = 
-  init_walls  0 (Array.make (l * h * 2) {x = -1; y = -1; e_or_s = true}) 0 0
 
 let maze =
   Random.self_init ();
   let grid  = Array.make (l * h) {we = true; ws =  true} in
-  let walls = init_walls () in
-  let init_wrapper = (Array.make (l * h * 2) {x = -1; y = -1; e_or_s = true}, 0) in
-  let start_arr = add init_wrapper walls.(Random.int (l * h * 2)) in
+  let init_wrapper = (Array.make (l * h * 4) {x = -1; y = -1; e_or_s = true}, 0) in
+  let r_x = Random.int (l) in
+  let r_y = Random.int (h) in
+  let r_b = Random.bool () in
+  let start_arr = add init_wrapper {x = r_x; y = r_y; e_or_s = r_b} in
   display (progress start_arr grid)
