@@ -39,6 +39,7 @@ Start with a grid full of walls.
   - Remove the wall from the list.
 
 > ocamlc randomized_prim/maze.ml -o maze && ./maze 14 14
+> ocamlc randomized_prim/maze2.ml -o maze && ./maze 14 14
 ```
 ___________________________________________
 |______  ____  ____        |  |  |  ______|
