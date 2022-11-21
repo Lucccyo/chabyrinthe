@@ -5,7 +5,10 @@ type cell = {
   mutable rank: int;
 }
 
-let rec shuffle a i =
+let l = 4
+let h = 4
+
+(* let rec shuffle a i =
   if i = 0
   then a
   else (
@@ -20,7 +23,23 @@ let rec shuffle a i =
 let shuffle a =
   Random.self_init ();
   let l = Array.length a in
-  if l = 0 then a else shuffle a (l-1)
+  if l = 0 then a else shuffle a (l-1) *)
+
+let swap a x y rx ry =
+  let tmp = a.(x).(y) in
+  a.(x).(y) <- a.(rx).(ry);
+  a.(rx).(ry) <- tmp
+
+let shuffle a = 
+  Random.self_init ();
+  for y = 0 to Array.length a - 1 do
+    for x = 0 to Array.length a.(0) -1 do
+      let rx = Random.int (Array.length a.(0)) in
+      let ry = Random.int (Array.length a) in
+      swap a x y rx ry
+    done
+  done;
+  a
 
 let rec find c =
   if c.chief <> c
@@ -37,3 +56,13 @@ let union l r =
   else (cl.chief <- cr;
     cr.rank <- cr.rank+1)
 
+let () = 
+  let rec cell = {
+    s = true;
+    e = true;
+    chief = cell;
+    rank = 0;
+  } in
+  let grid = Array.make h (Array.make l cell) in
+  Format.printf "ba"
+  
